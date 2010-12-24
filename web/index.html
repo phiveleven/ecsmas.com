@@ -1,0 +1,63 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<title>Merry Ecsmas</title> 
+<link  href="//fonts.googleapis.com/css?family=Mountains+of+Christmas" rel="stylesheet" type="text/css" >
+<style>
+  * { margin:0; padding:0; border:0; color:inherit; }
+  body { 
+    background: #52b152; /* old browsers */
+    background: -moz-linear-gradient(left, #efe 0%, #52b152 100%); /* firefox */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#efe), color-stop(100%,#52b152)); /* webkit */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efe', endColorstr='#52b152',GradientType=1 ); /* ie */
+  }
+  #label { 
+    width:600px;
+    background:red url(/img/wreath.png) right center no-repeat; 
+    color:white; 
+    padding:10px 20px; 
+    margin:20px 20px 10px auto;
+    font-family:'Mountains of Christmas', Tahoma, sans-serif; 
+    border-radius:10px;
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+  }
+  #label h3 { font-size:26px; }
+  #label h1 { font-size:60px; }
+  
+  #wrapper { 
+    background:white; 
+    margin:40px auto;
+    border:4px  gold;
+    width:416px;
+    height:416px;
+  }
+  
+  canvas {
+    border:8px outset green; 
+  }
+  
+  #footer { 
+    width:400px;
+    text-align:center;
+    margin:20px auto 0;
+    font:12px Tahoma, sans-serif; 
+    color:green; 
+  }
+</style>
+</head> 
+<body> 
+  <div id="label">
+    <h1>Merry Ecsmas</h1>
+    <h3>To: You<br />From: <a href="http://twitter.com/jasonmoo">@jasonmoo</a> and <a href="http://twitter.com/darkgoyle">@darkgoyle</a></h3>
+  </div>
+  
+  <div id="wrapper"><canvas id="gift" width="400" height="400"></canvas></div>
+  
+  <div id="footer">
+    Merry Ecsmas Everyone! &bull; 2010 &bull; ecsmas.com
+  </div>
+</body>
+
+</html>
+
