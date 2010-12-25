@@ -17,7 +17,8 @@ var canvas = (function(canvas){
   // serendipitous rotational offset
   ctx.rotate(TwoPi*Math.random());
 
-  var brush = 161;
+  // brush width relative to canvas size
+  var brush = canvas.width/canvas.height*91;
   var r_max = Math.min(canvas.width/2, canvas.height/2) - brush;
 
   // hexagonal point
@@ -40,7 +41,7 @@ var canvas = (function(canvas){
   // canvas API
   return {
     clear: function(){
-      var r = r_max*r_max;
+      var r = 1000;
       ctx.clearRect(-r, -r, 2*r, 2*r);
     },
     rotate: function(x){ ctx.rotate(TwoPi/x) },
@@ -54,13 +55,13 @@ var canvas = (function(canvas){
       while(r > 0){
         for (var i=0; i<6; i++){
 
-          red = Math.floor(61 * (r/r_max));
+          red = Math.floor(100 * (r/(r_max)));
           ctx.fillStyle = 'rgba($r,$g,$b,$a)'.replace(/\$(\w)/g, function($0, $1){
-            return { r: red, g: 255-red, b:255, a: .06 }[$1];
+            return { r: red, g: 255-red, b:255, a: 15/r/Phi }[$1];
           });
 
           point([r, 0], brush*n);
-          for (var s = (r + r*n/2); s > r; s-=brush){
+          for (var s = (r + r*n/2); s > r; s-=150*n){
             point([x*s, -y*s], brush/Phi);
             point([x*s, y*s], brush/Phi);
           }
@@ -72,4 +73,4 @@ var canvas = (function(canvas){
       ctx.restore();
     }
   }
-})(document.getElementById('phlake'));
+})(document.getElementsByTagName('canvas')[0]);
