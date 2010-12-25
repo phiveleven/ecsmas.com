@@ -9,7 +9,7 @@ body{padding:0 0 20px;font-family:"Lucida Grande",Tahoma,sans-serif;background: 
 #flink input{font-size:18px;width:340px;border:2px solid gold;padding:3px;margin:4px 4px 0;text-align:center;}
 #share{display:inline-block;margin:30px auto 20px;}
 #wrapper{clear:both;width:1100px;text-align:center;margin:40px auto;}
-canvas{margin:10px;}
+canvas{margin:10px;box-shadow:0 3px 15px #666;-moz-box-shadow:0 3px 15px #666;-webkit-box-shadow:0 3px 15px #666}
 #gift{background:#FFF;}
 #phlake{background:#000;}
 #actions{width:500px;text-align:center;margin:10px auto;}
