@@ -85,6 +85,8 @@ function run_flake(key) {
 
 $('#actions button').click(function(e) {
   run_flake();
+  var myTracker = _gat._getTrackerByName();
+  myTracker._trackEvent('snowflakey','create');
 });
 $('#flink input').click(function(e) {
   this.select();
