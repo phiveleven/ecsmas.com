@@ -2,104 +2,26 @@
 <html lang="en"> 
 <head> 
 <title>Merry Ecsmas</title> 
-<link  href="//fonts.googleapis.com/css?family=Mountains+of+Christmas" rel="stylesheet" type="text/css" >
-<style>
-  * { margin:0; padding:0; border:0; color:inherit; }
-  body { 
-    padding:0 0 20px;
-    background: #52b152; /* old browsers */
-    background: -moz-linear-gradient(left, #efe 0%, #52b152 100%); /* firefox */
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%,#efe), color-stop(100%,#52b152)); /* webkit */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efe', endColorstr='#52b152',GradientType=1 ); /* ie */
-  }
-  #label { 
-    width:600px;
-    background:red url(/img/wreath.png) right center no-repeat; 
-    color:white; 
-    padding:10px 20px; 
-    margin:20px 20px 10px auto;
-    font-family:'Mountains of Christmas', Tahoma, sans-serif; 
-    border-radius:10px;
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
-  }
-  #label h3 { font-size:26px; }
-  #label h1 { font-size:60px; }
-  
-  #card {
-    float:left;
-    background:white;
-    font-family:"Lucida Grande",Tahoma,sans-serif;
-    padding:10px;
-    width:460px;
-  }
-  
-  #share {
-    text-align:right;
-    width:300px;
-    margin:10px 20px 10px auto;
-  }
-  #share a {
-    display:inline-block;
-    float:right;
-    margin:0 2px;
-  }
-  
-  #wrapper { 
-    margin:40px auto;
-    width:1100px;
-    text-align:center;
-  }
-
-  #gift {
-    background:white;
-  }
-  #phlake {
-    background:black;
-  }
- 
-  #actions {
-    width:300px;
-    margin:20px auto;
-    text-align:center;
-  }
-  
-  #actions button {
-    font-family:'Mountains of Christmas', Tahoma, sans-serif; 
-    font-size:30px;
-    padding:10px;
-    border:2px solid red;
-    background:white;
-    cursor:pointer;
-  }
-  
-  #footer { 
-    width:400px;
-    text-align:center;
-    margin:20px auto 0;
-    font:12px Tahoma, sans-serif; 
-    color:green; 
-  }
-</style>
+<link href="//fonts.googleapis.com/css?family=Mountains+of+Christmas" rel="stylesheet" type="text/css" >
+<link href="/css/ecsmas.css" rel="stylesheet" type="text/css" >
 </head> 
 <body> 
-  <div id="card">
-    It's that time of year again and we just wanted to send along a wish that you and yours have a very Merry Ecsmas.  In the spirit of Ecsmas
-    we have put together a little gift for you written in our favorite ECMA Script, Javascript.  These snowflakes are generated from a timestamp
-    and your geolocation information.  In this way we've created a snowflake entirely unique to you.  You may ponder the significance of this 
-    later.  For now enjoy each snowflake that you create.  We are grateful you have arrived here.  May this page brighten your day and bring you
-    Ecsmas miracles in the year to come.  Merry Ecsmas everyone!
+  
+  <div id="header">
+    <div id="card">
+      It's that time of year again and we just wanted to send along a wish that you and yours have a very Merry Ecsmas.  In the spirit of Ecsmas
+      we have put together a little gift for you written in our favorite ECMA Script, Javascript.  These snowflakes are generated from a precise 
+      timestamp the moment you accessed this page.  In this way we've created a snowflake entirely unique to you.  You may ponder the significance of this 
+      later.  For now enjoy each snowflake that you create.  We are grateful you have arrived here.  May this page brighten your day and bring you
+      Ecsmas miracles in the year to come.  Merry Ecsmas everyone!
+    </div>
+
+    <div id="label">
+      <h1>Merry Ecsmas</h1>
+      <h3>To: You<br />From: <a href="http://twitter.com/jasonmoo">@jasonmoo</a> and <a href="http://twitter.com/darkgoyle">@darkgoyle</a></h3>
+    </div>
   </div>
 
-  <div id="label">
-    <h1>Merry Ecsmas</h1>
-    <h3>To: You<br />From: <a href="http://twitter.com/jasonmoo">@jasonmoo</a> and <a href="http://twitter.com/darkgoyle">@darkgoyle</a></h3>
-  </div>
-
-  <div id="share">
-    <a href="http://twitter.com/share" class="twitter-share-button" data-text="Merry Ecsmas" data-count="horizontal">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-    <a name="fb_share" class="facebook-share-button"></a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
-  </div>
   
   <div id="wrapper">
     <canvas id="gift" width="500" height="500"></canvas>
@@ -107,15 +29,20 @@
   </div>
   
   <div id="actions">
-    <button>Make a new one</button>
+    <button>Create new snowflakes</button>
+    <div id="share">
+      <a href="http://twitter.com/share" class="twitter-share-button" data-text="Merry Ecsmas" data-count="horizontal">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      <a name="fb_share" class="facebook-share-button"></a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
+    </div>
+
   </div>
   
   <div id="footer">
     Merry Ecsmas Everyone! &bull; 2010 &bull; ecsmas.com
   </div>
 </body>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript" src="/js/md5.js" charset="utf-8"></script>
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript" src="/js/phlaky.js"></script>
 <script type="text/javascript" src="/js/gift.js"></script>
 <script>
