@@ -11,7 +11,7 @@
   <div id="header">
     <div id="card">
       It's that time of year again and we just wanted to send along a wish that you and yours have a very Merry Ecsmas.  In the spirit of Ecsmas
-      we have put together a little gift for you written in our favorite ECMA Script, Javascript.  These snowflakes are generated from a precise 
+      we have put together a little gift for you written in our favorite ECMAScript, Javascript.  These snowflakes are generated from a precise 
       timestamp the moment you accessed this page.  In this way we've created a snowflake entirely unique to you.  You may ponder the significance of this 
       later.  For now enjoy each snowflake that you create.  We are grateful you have arrived here.  May this page brighten your day and bring you
       Ecsmas miracles in the year to come.  Merry Ecsmas everyone!
@@ -45,6 +45,7 @@
     Merry Ecsmas Everyone! &bull; 2010 &bull; ecsmas.com
   </div>
 </body>
+<!--[if IE]><script src="/js/excanvas.js"></script><![endif]-->
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript" src="/js/phlaky.js"></script>
 <script type="text/javascript" src="/js/gift.js"></script>
@@ -84,6 +85,8 @@ function run_flake(key) {
 
 $('#actions button').click(function(e) {
   run_flake();
+  var myTracker = _gat._getTrackerByName();
+  myTracker._trackEvent('snowflakey','create');
 });
 $('#flink input').click(function(e) {
   this.select();
