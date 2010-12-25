@@ -133,19 +133,18 @@ function run_flake(key) {
   var n = parseInt(key,16);
   while (n > 1) n /= Phi;
   
-  var autorotate = true;
-  var detail = true;
+  var detail = 3;
   clearTimeout(run_flake.timeout);
   
   (function(){
     canvas.clear();
     canvas.flake(n);
-    if (detail) {
+    if (detail > 1) {
       canvas.flake(n*Phi);
       canvas.flake(n/Phi);
     }
-    if (autorotate){
-      canvas.rotate(1e3*Phi);
+    if (detail > 2){
+      canvas.rotate(7e3);
       run_flake.timeout = setTimeout(arguments.callee, Phi*30);
     }
   })();
