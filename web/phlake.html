@@ -8,18 +8,27 @@ canvas { margin:0 auto; display:block; background:transparent }
 
 <canvas width=618px height=618px></canvas>
 
-<script src="js/phlaky.js"></script>
+<script src="phlaky.js"></script>
 
 <script>(function(n){
+  // 0 < n < 1
+  while (n > 1) n /= Phi;
   
-  var step = 250; //ms
-  setTimeout(function(){
+  var autorotate = true;
+  var detail = true;
+  
+  (function(){
     canvas.clear();
     canvas.flake(n);
-    canvas.flake(n*Phi);
-    canvas.flake(n/Phi);
-    var sign = [-1, 1][+new Date % 2];
-    canvas.rotate(1e3*Phi);
-    setTimeout(arguments.callee, Phi*30);
-  }, 1e3);
+    if (detail) {
+      canvas.flake(n*Phi);
+      canvas.flake(n/Phi);
+    }
+    if (autorotate){
+      canvas.rotate(1e3*Phi);
+      setTimeout(arguments.callee, Phi*30);
+    }
+  })();
+  
+  
 })(Math.random());</script>
