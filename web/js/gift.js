@@ -1,7 +1,8 @@
-
 var snowflake = function(hash) {
   
   function Key(hex_string) {
+    var i = 3
+    while (i--) hex_string += MD5(hex_string);
     this.key = hex_string.match(/(..)/g).map(function(a) { return parseInt(a,16) });
     this.shift = function() {
       var val = this.key.shift();
@@ -39,7 +40,7 @@ var snowflake = function(hash) {
   
   // next the inner limbs
   var coords = get_coords(inner_radius);
-  context.fillStyle = 'rgba(0,0,222,.9)';
+  context.fillStyle = 'rgba(0,0,222,.8)';
   context.beginPath();
   var c = coords.shift();
   context.moveTo(c.x,c.y);
