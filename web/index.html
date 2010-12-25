@@ -30,8 +30,11 @@
   
   <div id="actions">
     <button>Create new snowflakes</button>
+    <div id="flink">
+      Send these flakes to a friend.  :) <input>
+    </div>
     <div id="share">
-      <a href="http://twitter.com/share" class="twitter-share-button" data-text="Merry Ecsmas" data-count="horizontal">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+      <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://ecsmas.com" data-text="Merry Ecsmas!  Here are 2 snowflakes for you.  :D" data-count="horizontal">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
       <a name="fb_share" class="facebook-share-button"></a><script src="http://static.ak.fbcdn.net/connect.php/js/FB.Share" type="text/javascript"></script>
     </div>
 
@@ -42,23 +45,22 @@
   </div>
 </body>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-<script type="text/javascript" src="/js/md5.js" charset="utf-8"></script>
 <script type="text/javascript" src="/js/phlaky.js"></script>
 <script type="text/javascript" src="/js/gift.js"></script>
 <script>
 
 function run_flake(key) {
 
-  function generate_key() {
-    return MD5(+new Date+'');
-  }
-
-  key = key ? key.replace(/^\#/,'') : generate_key();
+  key = key ? key.replace('#','') : (+new Date).toString(36);
   window.location.hash = key;
+  $('#flink input').val(window.location.href);
   window.snowflake(key);
   
-  var n = parseInt(key,16);
-  while (n > 1) n /= Phi;
+  var n = (function(t){
+   while (t > 1)
+     t /= Math.exp(.5+Math.sqrt(5)/2,t);
+   return t
+  })(+new Date % 215);
   
   var detail = 3;
   clearTimeout(run_flake.timeout);
@@ -67,12 +69,12 @@ function run_flake(key) {
     canvas.clear();
     canvas.flake(n);
     if (detail > 1) {
-      canvas.flake(n*Phi);
-      canvas.flake(n/Phi);
+      canvas.flake(n/Math.PI*Phi);
+      canvas.flake(n/Math.PI/Phi);
     }
     if (detail > 2){
       canvas.rotate(2e3);
-      run_flake.timeout = setTimeout(arguments.callee, Phi*30);
+      run_flake.timeout = setTimeout(arguments.callee, 30);
     }
   })();
   
@@ -82,8 +84,9 @@ $('#actions button').click(function(e) {
   run_flake();
 });
 
-// initiate the snowflake
-run_flake(window.location.hash);
+$(function() {
+  run_flake(window.location.hash);
+});
 </script>
 
 <script>

@@ -1,16 +1,18 @@
 *{border:0;color:inherit;margin:0;padding:0;}
-body{padding:0 0 20px;background: #52b152;background: -moz-linear-gradient(left, #efe 0%, #52b152 100%);background: -webkit-gradient(linear, left top, right top, color-stop(0%,#efe), color-stop(100%,#52b152));filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efe', endColorstr='#52b152',GradientType=1 );}
+body{padding:0 0 20px;font-family:"Lucida Grande",Tahoma,sans-serif;background: #52b152;background: -moz-linear-gradient(left, #efe 0%, #52b152 100%);background: -webkit-gradient(linear, left top, right top, color-stop(0%,#efe), color-stop(100%,#52b152));filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#efe', endColorstr='#52b152',GradientType=1 );}
 #header{width:1100px;height:180px;margin:10px auto;}
-#card{float:left;background:#FFF;font-family:"Lucida Grande",Tahoma,sans-serif;font-size:12px;margin-top:4px;width:400px;padding:10px;}
+#card{float:left;background:#FFF;font-size:12px;margin-top:4px;width:400px;padding:10px;}
 #label{float:right;width:600px;background:red url(/img/wreath.png) right center no-repeat;color:#FFF;font-family:'Mountains of Christmas', Tahoma, sans-serif;border-radius:10px;-moz-border-radius:10px;-webkit-border-radius:10px;padding:10px 20px;}
 #label h3{font-size:26px;}
 #label h1{font-size:60px;}
+#flink{background:white;margin:10px auto;width:500px;font-size:16px;padding:10px;}
+#flink input{font-size:16px;width:400px;border:2px solid gold;padding:2px;}
 #share{display:inline-block;margin:30px auto 20px;}
 #wrapper{clear:both;width:1100px;text-align:center;margin:40px auto;}
 canvas{margin:10px;}
 #gift{background:#FFF;}
 #phlake{background:#000;}
-#actions{width:300px;text-align:center;margin:10px auto;}
+#actions{width:500px;text-align:center;margin:10px auto;}
 #actions button{font-family:'Mountains of Christmas', Tahoma, sans-serif;font-size:30px;border:2px solid red;background:#FFF;cursor:pointer;padding:10px;}
 #footer{width:400px;text-align:center;font:12px Tahoma, sans-serif;color:green;margin:20px auto 0;}
 #share .twitter-share-button,#share .facebook-share-button{float:left;}

@@ -1,9 +1,15 @@
 var snowflake = function(hash) {
   
-  function Key(hex_string) {
-    var i = 3
-    while (i--) hex_string += MD5(hex_string);
-    this.key = hex_string.match(/(..)/g).map(function(a) { return parseInt(a,16) });
+  function Key(key) {
+    key = (function(t){
+      Phi=.5+Math.sqrt(5)/2; 
+      var s = t.toString().replace(/./g, function(l){ 
+        return (l*Phi*(t%215 + 1)).toString(16);
+      }).replace('.',''); 
+      return s;
+    })(parseInt(key,36));
+    
+    this.key = key.match(/(..)/g).map(function(a) { return parseInt(a,16) });
     this.shift = function() {
       var val = this.key.shift();
       this.key.push(val);
