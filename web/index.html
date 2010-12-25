@@ -84,6 +84,9 @@ function run_flake(key) {
 $('#actions button').click(function(e) {
   run_flake();
 });
+$('#flink input').click(function(e) {
+  this.select();
+})
 
 $(function() {
   run_flake(window.location.hash);
