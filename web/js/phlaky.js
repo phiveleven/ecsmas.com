@@ -72,4 +72,4 @@ var canvas = (function(canvas){
       ctx.restore();
     }
   }
-})(document.getElementsByTagName('canvas')[0]);
+})(document.getElementById('phlake'));
