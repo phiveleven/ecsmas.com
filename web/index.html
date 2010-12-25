@@ -59,10 +59,10 @@ function run_flake(key) {
   $('#flink input').val(window.location.href);
   window.snowflake(key);
   
-  var n = (function(t){
-   while (t > 1)
-     t /= Math.exp(.5+Math.sqrt(5)/2,t);
-   return t
+  var n = (function(n){
+   while (n > 1)
+     n /= Math.exp(Phi,t);
+   return n;
   })(parseInt(key,36) % 215);
   
   var detail = 3;
