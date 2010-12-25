@@ -1,3 +1,8 @@
+/**
+ * Jason Mooberry
+ * @jasonmoo  
+ *
+ */
 var snowflake = function(hash) {
   
   function Key(key) {
