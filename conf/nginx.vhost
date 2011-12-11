@@ -1,0 +1,20 @@
+server {
+  listen 80;
+  server_name  local.ecsmas.com;
+  root         /Users/jason/Sites/ecsmas.com/2011;
+  index        index.html;
+
+  location = /favicon.ico {
+    log_not_found off;
+  }
+}
+server {
+  listen 80;
+  server_name  ~^local\.(?:(?<year>201\d)\.)?ecsmas\.com$;
+  root         /Users/jason/Sites/ecsmas.com/$year;
+  index        index.html;
+
+  location = /favicon.ico {
+    log_not_found off;
+  }
+}
