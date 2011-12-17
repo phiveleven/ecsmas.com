@@ -6,7 +6,7 @@
  */
 var phlake = function(num, x,y, context, key){
 
-  var t = new Date*num,
+  var t = new Date/num,
     n = (function(n){
      while (n > 1)
        n /= Math.exp(PHI,t);
@@ -21,7 +21,8 @@ var phlake = function(num, x,y, context, key){
   ctx.translate(x,y);
   // serendipitous rotational offset
   ctx.rotate(TWOPI*Math.random());
-  ctx.scale(.05,.05);
+  // ctx.scale(.05*Math.random(),.05*Math.random());
+  ctx.scale(.04,.04);
 
   // brush width relative to canvas size
   var brush = canvas.width/canvas.height*91;

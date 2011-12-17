@@ -11,6 +11,7 @@ canvas { position:absolute; top:0; left:0; }
 <body>
 	<canvas id="background"></canvas>
 	<canvas id="snow"></canvas>
+	<canvas id="foreground"></canvas>
 	<canvas id="trees"></canvas>
 	<canvas id="ltree"></canvas>
 </body>
@@ -22,8 +23,7 @@ canvas { position:absolute; top:0; left:0; }
 <script src="js/phlaky.js"></script>
 <script>
 (function() {
-	var main = this,
-		PHI = Math.sqrt(5)/2+.5;
+	var main = this;
 
 	// callback handler for triggering events at specific times
 	var Callbacks = (function() {
@@ -45,7 +45,7 @@ canvas { position:absolute; top:0; left:0; }
 
 	// bind to resize event
 	(function() {
-		var canvi = document.getElementsByTagName('canvas'), i;
+		var canvi = document.getElementsByTagName('canvas'), i, timeout;
 		function update_canvi() {
 			for (i in canvi) {
 				canvi[i].width = window.innerWidth;
@@ -54,7 +54,11 @@ canvas { position:absolute; top:0; left:0; }
 			Callbacks.trigger('resize');
 		}
 		update_canvi();
-		window.addEventListener('resize',update_canvi);
+		window.addEventListener('resize',function() {
+			// use delay to prevent retriggering updates on every single resize event
+			clearTimeout(timeout);
+			timeout = setTimeout(update_canvi,200);	
+		});
 	})();
 
 	// set up animation request frame
@@ -68,33 +72,72 @@ canvas { position:absolute; top:0; left:0; }
             }
 	})();
 
-	Number.prototype.degreesToRadians = function() {
-      return this*Math.PI/180;
-    };
+	Number.prototype.degreesToRadians = function() { return this*Math.PI/180; };
 
+    Callbacks.addEventListener('resize',render_page);
+    Callbacks.trigger('resize');
 
+    function render_page() {
+	    // snow canvas shenanigance
+		(function() { 
+			var snow_canvas = document.getElementById('snow'),
+				snow_ctx = snow_canvas.getContext('2d');
 
-	(function() {
-		var snow_canvas = document.getElementById('snow'),
-			snow_ctx = snow_canvas.getContext('2d');
+			(function() {
+				
+				var i;
+				for (i=1; i<=100; i++) {
+					snowflake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
+					phlake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
+				}
 
-		(function() {
-			
-			var i;
-			for (i=1; i<=100; i++) {
-				snowflake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
-				phlake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
-			}
-
+			})();
 		})();
 
 
-	})();
+		// winter wonderland canvas shenanigantz
+		(function() {
+			var bg_canvas = document.getElementById('background'),
+				bg_ctx = bg_canvas.getContext('2d'),
+				fg_canvas = document.getElementById('foreground'),
+				fg_ctx = fg_canvas.getContext('2d');
+
+			
+			var w = bg_canvas.width,
+				h = bg_canvas.height,
+				bgc = bg_ctx,
+				fgc = fg_ctx;
 
 
+			// bg hill
+			bgc.save();
+			bgc.beginPath();
+			bgc.fillStyle = 'rgb(220,230,240)';
+			bgc.moveTo(0,h/6);
+			bgc.bezierCurveTo(w/4,h/10,w/2,h/6,w,h/12);
+			bgc.lineTo(w,h);
+			bgc.lineTo(0,h);
+			bgc.fill();
+			bgc.restore();
+
+			// main hill
+			fgc.save();
+			fgc.beginPath();
+			fgc.strokeStyle = 'rgb(200,210,230)';
+			fgc.fillStyle = 'rgb(230,230,230)';
+			fgc.lineWidth = 3;
+			fgc.moveTo(0,h);
+			fgc.bezierCurveTo(w/3,h/3,w/2,h/2,w,h/1.5);
+			fgc.stroke();
+			fgc.lineTo(w,h);
+			fgc.lineTo(0,h);
+			fgc.fill();
+			fgc.restore();
 
 
+		})();
 
+    }
 	
 })();	
 </script>

@@ -68,7 +68,8 @@ window.snowflake = function(num, x,y, context, key) {
 
   // next the teeth
   var teeth_interval = Math.round((limb_radius-(limb_radius*.07))/teeth_number),
-    tint = teeth_interval;
+    tint = teeth_interval,
+    neg2sf_radians = -2*sf_radians;
   while (teeth_number--) {
     context.beginPath();
     context.lineWidth = get_in_range(key.shift(),2,20);
@@ -80,7 +81,7 @@ window.snowflake = function(num, x,y, context, key) {
       context.rotate(sf_radians);
       context.moveTo(0,0);
       context.lineTo(0,length);
-      context.rotate(-2*sf_radians);
+      context.rotate(neg2sf_radians);
       context.moveTo(0,0);
       context.lineTo(0,length);
       context.restore();
