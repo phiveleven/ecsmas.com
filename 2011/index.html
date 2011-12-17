@@ -1,1 +1,101 @@
-ecsmas 2011
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ecsmas 2011</title>
+</head>
+<style>
+* { margin:0; padding:0; border:0; }
+html, body { background:#eee; overflow:hidden; }
+canvas { position:absolute; top:0; left:0; }
+</style>
+<body>
+	<canvas id="background"></canvas>
+	<canvas id="snow"></canvas>
+	<canvas id="trees"></canvas>
+	<canvas id="ltree"></canvas>
+</body>
+<script>
+	PHI = Math.sqrt(5)/2+.5;
+	TWOPI = Math.PI*2;
+</script>
+<script src="js/gift.js"></script>
+<script src="js/phlaky.js"></script>
+<script>
+(function() {
+	var main = this,
+		PHI = Math.sqrt(5)/2+.5;
+
+	// callback handler for triggering events at specific times
+	var Callbacks = (function() {
+		var map = {};
+		return {
+			addEventListener: function(event,callback) {
+				map[event] = map[event] || [];
+				map[event].push(callback);
+			},
+			trigger: function(event) {
+				if (typeof map[event] === 'undefined') 
+					return;
+				var i;
+				for (i in map[event])
+					map[event][i].call(main);
+			}
+		};
+	})();
+
+	// bind to resize event
+	(function() {
+		var canvi = document.getElementsByTagName('canvas'), i;
+		function update_canvi() {
+			for (i in canvi) {
+				canvi[i].width = window.innerWidth;
+				canvi[i].height = window.innerHeight;
+			}
+			Callbacks.trigger('resize');
+		}
+		update_canvi();
+		window.addEventListener('resize',update_canvi);
+	})();
+
+	// set up animation request frame
+	var requestAnimationFrame = (function() {
+		return window.requestAnimationFrame || 
+            window.webkitRequestAnimationFrame || 
+			window.mozRequestAnimationFrame ||  
+            window.msRequestAnimationFrame ||
+            function (callback) {
+            	window.setTimeout(callback,30);
+            }
+	})();
+
+	Number.prototype.degreesToRadians = function() {
+      return this*Math.PI/180;
+    };
+
+
+
+	(function() {
+		var snow_canvas = document.getElementById('snow'),
+			snow_ctx = snow_canvas.getContext('2d');
+
+		(function() {
+			
+			var i;
+			for (i=1; i<=30; i++) {
+				snowflake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
+				phlake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
+			}
+
+		})();
+
+
+	})();
+
+
+
+
+
+	
+})();	
+</script>
+</html>
