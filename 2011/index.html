@@ -83,15 +83,22 @@ canvas { position:absolute; top:0; left:0; }
 			var snow_canvas = document.getElementById('snow'),
 				snow_ctx = snow_canvas.getContext('2d');
 
+			snow_ctx.translate(0,20);
 			(function() {
 				
 				var i;
 				for (i=1; i<=100; i++) {
-					snowflake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
-					phlake(i, (window.innerWidth*Math.random())|0, (window.innerHeight*Math.random())|0, snow_ctx);
+					snowflake(i, (window.innerWidth*Math.random())|0, ((window.innerHeight-40)*Math.random())|0, snow_ctx);
+					phlake(i, (window.innerWidth*Math.random())|0, ((window.innerHeight-40)*Math.random())|0, snow_ctx);
 				}
 
 			})();
+
+			// (function() {
+			// 	snow_canvas.style.top = (parseInt(snow_canvas.style.top.replace('px','')||0,10)+1)+'px';
+			// 	// requestAnimationFrame(arguments.callee);
+			// 	setTimeout(arguments.callee,30);
+			// })();
 		})();
 
 
