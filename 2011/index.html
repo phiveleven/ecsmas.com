@@ -7,13 +7,32 @@
 * { margin:0; padding:0; border:0; }
 html, body { background:#eee; overflow:hidden; }
 canvas { position:absolute; top:0; left:0; }
+
+@-webkit-keyframes makeitso {
+	from { opacity:0; }
+	to {opacity:.4; }
+}
+@-moz-keyframes makeitso {
+	from {opacity:0;}
+	to {opacity:.4;}
+}
+.snow { opacity:0; }
+.fadein {
+	-webkit-animation: makeitso 2s 0s 2 ease-in-out alternate;
+	-moz-animation: makeitso 4s 0s 2 ease-in-out alternate;
+}
+
+textarea { display:none;
+	position:absolute; top:65%; left:35%; width:30%; height:25%; border:2px solid gray;
+	padding:4px; font-size:16px; font-family:'Comic Sans MS', cursive; resize:none;
+}
 </style>
 <body>
 	<canvas id="background"></canvas>
-	<canvas id="snow"></canvas>
 	<canvas id="foreground"></canvas>
 	<canvas id="trees"></canvas>
 	<canvas id="ltree"></canvas>
+	<textarea></textarea>
 </body>
 <script>
 	PHI = Math.sqrt(5)/2+.5;
@@ -36,8 +55,7 @@ canvas { position:absolute; top:0; left:0; }
 			trigger: function(event) {
 				if (typeof map[event] === 'undefined') 
 					return;
-				var i;
-				for (i in map[event])
+				for (var i in map[event])
 					map[event][i].call(main);
 			}
 		};
@@ -79,26 +97,80 @@ canvas { position:absolute; top:0; left:0; }
 
     function render_page() {
 	    // snow canvas shenanigance
-		(function() { 
-			var snow_canvas = document.getElementById('snow'),
-				snow_ctx = snow_canvas.getContext('2d');
+	    (function() { 
 
-			snow_ctx.translate(0,20);
-			(function() {
-				
-				var i;
-				for (i=1; i<=100; i++) {
-					snowflake(i, (window.innerWidth*Math.random())|0, ((window.innerHeight-40)*Math.random())|0, snow_ctx);
-					phlake(i, (window.innerWidth*Math.random())|0, ((window.innerHeight-40)*Math.random())|0, snow_ctx);
+	    	var fg_canvas = document.getElementById('foreground');
+
+	    	function new_flake(canvas) {
+				if (typeof canvas === 'number') {
+					var i = canvas,
+						canvas = document.createElement('canvas');
+					canvas.id = 'flake'+i;
+					canvas['data-flake-id'] = i;
+					canvas.width = canvas.height = 60;
+					document.body.insertBefore(canvas,fg_canvas);
 				}
+
+	    		canvas.style.opacity = 0;
+				canvas.className = 'flake';
+				var ctx = canvas.getContext('2d'),
+					i = i || canvas['data-flake-id'];
+
+				canvas.style.top = ((window.innerHeight*Math.random())|0)+'px';
+				canvas.style.left = ((window.innerWidth*Math.random())|0)+'px';
+
+				ctx.clearRect(0,0,60,60); 
+				new_flake.x = new_flake.x || 0;
+				if (new_flake.x ^= 1) {
+					snowflake(i, 30,30, ctx);	
+				}
+				else {
+					phlake(i, 30,30, ctx);	
+				} 
+				return canvas;
+	    	}
+
+	    	function kill_a_flake(node) {
+	    		node.className = '';
+	    		var dead_to_me = node.parentNode && node.parentNode.removeChild(node);
+	    		dead_to_me = null;
+	    	}
+
+	    	function add_a_flake(canvas) {
+	    		var flake = new_flake(canvas);
+	    		// force reflow with 0 timeout
+	    		setTimeout(function() {
+	    			flake.className = 'flake fadein';
+	    		},0);
+	    		// if (i % 15 === 0) 
+	    		// 	flake.className += '';
+	    	}
+
+	    	function flake_is_over(e) {
+				if (/flake fadein/.test(e.target.className) === false) return;
+				add_a_flake(e.target);
+			}
+
+			document.body.addEventListener('webkitAnimationEnd',flake_is_over,false);
+			document.body.addEventListener('animationend',flake_is_over,false);
+			
+			(function() {
+				var flakes = Math.max(20,(window.innerWidth*window.innerHeight)/18000|0);
+				console.log(flakes);
+
+				// kill any existing
+				var dead_flakes = [].slice.call(document.getElementsByClassName('flake')), i;
+				for (i in dead_flakes)
+					kill_a_flake(dead_flakes[i]);
+
+				(function() {
+					add_a_flake(flakes--);
+					if (flakes) 
+						setTimeout(arguments.callee, 200*Math.random()|0);
+				})();
 
 			})();
 
-			// (function() {
-			// 	snow_canvas.style.top = (parseInt(snow_canvas.style.top.replace('px','')||0,10)+1)+'px';
-			// 	// requestAnimationFrame(arguments.callee);
-			// 	setTimeout(arguments.callee,30);
-			// })();
 		})();
 
 

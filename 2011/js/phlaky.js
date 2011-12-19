@@ -25,8 +25,8 @@ var phlake = function(num, x,y, context, key){
   ctx.scale(.04,.04);
 
   // brush width relative to canvas size
-  var brush = canvas.width/canvas.height*91;
-  var r_max = Math.min(canvas.width/2, canvas.height/2) - brush;
+  var brush = window.innerWidth/window.innerHeight*91;
+  var r_max = Math.min(window.innerWidth/2, window.innerHeight/2) - brush;
   
   var sym = 3,
     TWOPIsym = TWOPI/sym;
