@@ -107,7 +107,8 @@ textarea {
 	    // snow canvas shenanigance
 	    (function() { 
 
-	    	var fg_canvas = document.getElementById('foreground');
+	    	var fg_canvas = document.getElementById('foreground'),
+	    		fg_ctx = fg_canvas.getContext('2d');
 
 	    	function new_flake(canvas) {
 				if (typeof canvas === 'number') {
@@ -122,10 +123,21 @@ textarea {
 	    		canvas.style.opacity = 0;
 				canvas.className = 'flake';
 				var ctx = canvas.getContext('2d'),
-					i = i || canvas['data-flake-id'];
+					i = i || canvas['data-flake-id'],
+					center = canvas.width*.5|0;
 
-				canvas.style.top = ((window.innerHeight*Math.random())|0)+'px';
-				canvas.style.left = ((window.innerWidth*Math.random())|0)+'px';
+				// generate random location that not hidden by an object in the foreground canvas
+				var coords = (function() {
+					var x = (window.innerWidth*Math.random())|0,
+						y = (window.innerHeight*Math.random())|0,
+						p = fg_ctx.getImageData(x+center,y+center,1,1);
+					if (p.data[3] > 0) // [3] === alpha 
+						return arguments.callee();
+					return [x,y];
+				})();
+
+				canvas.style.left = coords[0]+'px';
+				canvas.style.top = coords[1]+'px';
 
 				ctx.clearRect(0,0,60,60); 
 				new_flake.x = new_flake.x || 0;
@@ -163,7 +175,7 @@ textarea {
 			document.body.addEventListener('animationend',flake_is_over,false);
 			
 			(function() {
-				var flakes = Math.max(20,(window.innerWidth*window.innerHeight)/18000|0);
+				var flakes = Math.max(15,(window.innerWidth*window.innerHeight)/30000|0);
 				console.log(flakes);
 
 				// kill any existing
@@ -183,7 +195,7 @@ textarea {
 
 
 		// winter wonderland canvas shenanigantz
-		(function() {
+		(function() { 
 			var bg_canvas = document.getElementById('background'),
 				bg_ctx = bg_canvas.getContext('2d'),
 				fg_canvas = document.getElementById('foreground'),
@@ -194,7 +206,6 @@ textarea {
 				h = bg_canvas.height,
 				bgc = bg_ctx,
 				fgc = fg_ctx;
-
 
 			// bg hill
 			bgc.save();
@@ -233,7 +244,6 @@ textarea {
 			ctx.clearRect(0,0,canvas.width,canvas.height);
 
 			ctx.save();
-			console.log(ta.offsetTop);
 			ctx.translate(ta.offsetLeft,ta.offsetTop);
 			ctx.strokeStyle = 'rgba(255,255,255,.4)';
 			ctx.fillStyle = 'rgba(255,255,255,.8)'
