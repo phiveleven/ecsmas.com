@@ -8,6 +8,9 @@
 html, body { background:#eee; overflow:hidden; }
 canvas { position:absolute; top:0; left:0; }
 
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
 @-webkit-keyframes makeitso {
 	from { opacity:0; }
 	to {opacity:.4; }
@@ -22,17 +25,22 @@ canvas { position:absolute; top:0; left:0; }
 	-moz-animation: makeitso 2s 0s 2 ease-in-out alternate;
 }
 
-textarea { display:none;
-	position:absolute; top:65%; left:35%; width:30%; height:25%; border:2px solid gray;
-	padding:4px; font-size:16px; font-family:'Comic Sans MS', cursive; resize:none;
+textarea { 
+	position:absolute; top:65%; left:32%; width:30%; height:25%; border:none;
+	padding:2px 10px; font-size:22px; font-weight:bold; font-family:'Comic Sans MS', cursive; resize:none;
+
+	background-color: gray;
+	-webkit-background-clip: text;
+	color: transparent;
+	text-shadow: rgba(255,255,255,0.7) 0 5px 6px;
 }
 </style>
 <body>
 	<canvas id="background"></canvas>
 	<canvas id="foreground"></canvas>
-	<canvas id="trees"></canvas>
+	<canvas id="overlay"></canvas>
 	<canvas id="ltree"></canvas>
-	<textarea></textarea>
+	<textarea id="message"></textarea>
 </body>
 <script>
 	PHI = Math.sqrt(5)/2+.5;
@@ -212,10 +220,42 @@ textarea { display:none;
 			fgc.lineTo(0,h);
 			fgc.fill();
 			fgc.restore();
-
-
 		})();
 
+
+		(function() {
+			var canvas = document.getElementById('overlay'),
+				ctx = canvas.getContext('2d'),
+				ta = document.getElementById('message'),
+				w = ta.offsetWidth,
+				h = ta.offsetHeight;
+			
+			ctx.clearRect(0,0,canvas.width,canvas.height);
+
+			ctx.save();
+			console.log(ta.offsetTop);
+			ctx.translate(ta.offsetLeft,ta.offsetTop);
+			ctx.strokeStyle = 'rgba(255,255,255,.4)';
+			ctx.fillStyle = 'rgba(255,255,255,.8)'
+			ctx.lineWidth = 50;
+			ctx.lineCap = 'round';
+			ctx.lineMiter = 'rounded';
+			
+			ctx.beginPath();
+			ctx.moveTo(0,20);
+			ctx.bezierCurveTo(-10,h/2, 20,h*.6, 0,h-20);
+			ctx.bezierCurveTo(-10,h+2, 10,h+2, 20,h);
+			ctx.bezierCurveTo(w-10,h+30, w/PHI,h+10, w-20,h);
+			ctx.bezierCurveTo(w+2,h+2, w+2,h-4, w,h-20);
+			ctx.bezierCurveTo(w+20,h*.6, w-10,h/3, w,20);
+			ctx.bezierCurveTo(w+2,-2, w-2,-2, w-20,0);
+			ctx.bezierCurveTo(w*.7,-10, w/3,-20, 20,0);
+			ctx.bezierCurveTo(0,2, -2,-2, 0,20);
+			ctx.stroke();
+			ctx.fill();
+
+			ctx.restore();
+		})();
     }
 	
 })();	
