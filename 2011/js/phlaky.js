@@ -29,47 +29,61 @@ var phlake = function(num, x,y, context, key){
   var r_max = Math.min(window.innerWidth/2, window.innerHeight/2) - brush;
   
   var sym = 3,
-    TWOPIsym = TWOPI/sym;
-  // hexagonal point
-  function point(p, r){
-    var  x = -r/2,
-         y = x/PHI;
-    ctx.save();
-    ctx.translate(p[0], p[1]);
-    var i = sym,
-        rPHI = r/PHI;
-    while (i) {
-      ctx.fillRect(x, y, r, rPHI);
-      ctx.rotate(TWOPIsym);
-      i--;
-    }
-    ctx.restore();
-  }
+    TWOPIsym = TWOPI/sym,
+    brushPHI = brush/PHI,
+    brushPHIr = -brushPHI/2,
+    brushPHIrPHI = brushPHIr/PHI,
+    brushPHIPHI = brushPHI/PHI,
+    twoPI6 = TWOPI/6;
 
   // phlake API
   var phlake = function(n){
-    var r = r_max,
-        red,
-        x = Math.cos(TWOPI/12*(n+1)),
-        y = Math.sin(TWOPI/12*(n+1)),
-        brushPHI = brush/PHI,
-        twoPI6 = TWOPI/6,
-        brushn = brush*n,
-        n150 = 150*n;
+    var brushn = brush*n,
+      brushnr = -brushn/2,
+      brushnrPHI = brushnr/PHI,
+      brushnPHI = brushn/PHI,
+      r = r_max,
+      red,
+      x = Math.cos(TWOPI/12*(n+1)),
+      y = Math.sin(TWOPI/12*(n+1)),
+      n150 = 150*n;
+
     while(r > 0){
-      red = Math.floor(100 * (r/(r_max)));
+      red = (100 * (r/(r_max)))|0;
       ctx.fillStyle = 'rgba('+red+','+(255-red)+',255,'+(15/r/PHI)+')';
       for (var i=0; i<6; i++){
-        point([r, 0], brushn);
+        pointn(r, 0);
         for (var s = (r + r*n/2); s > r; s-=n150){
-          point([x*s, -y*s], brushPHI);
-          point([x*s, y*s], brushPHI);
+          pointPHI(x*s, -y*s);
+          pointPHI(x*s, y*s);
         }
-
         ctx.rotate(twoPI6);
       }
       r -= brushPHI;
     }
+
+    // hexagonal point
+    function pointn(p0,p1){
+      ctx.save();
+      ctx.translate(p0, p1);
+      ctx.fillRect(brushnr, brushnrPHI, brushn, brushnPHI);
+      ctx.rotate(TWOPIsym);
+      ctx.fillRect(brushnr, brushnrPHI, brushn, brushnPHI);
+      ctx.rotate(TWOPIsym);
+      ctx.fillRect(brushnr, brushnrPHI, brushn, brushnPHI);
+      ctx.restore();
+    }
+    function pointPHI(p0,p1){
+      ctx.save();
+      ctx.translate(p0, p1);
+      ctx.fillRect(brushPHIr, brushPHIrPHI, brushPHI, brushPHIPHI);
+      ctx.rotate(TWOPIsym);
+      ctx.fillRect(brushPHIr, brushPHIrPHI, brushPHI, brushPHIPHI);
+      ctx.rotate(TWOPIsym);
+      ctx.fillRect(brushPHIr, brushPHIrPHI, brushPHI, brushPHIPHI);
+      ctx.restore();
+    }
+
   }
 
   phlake(n);
