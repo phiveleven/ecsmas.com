@@ -200,13 +200,15 @@ textarea {
 				fgc = fg_ctx;
 
 			// bg hill
-			var layers = 10;
+			var layers = 10,
+			    t = (new Date).getHours()/24; // a daylight function here pls
 			while (--layers){
-				var r = 1/Math.log(layers);
+				var r = 1/Math.log(layers),
+				    fill = 'rgba('+((220*r)|0)+','+((230*r)|0)+','+((240*r)|0)+','+t+')';
 				bgc.save();
 				bgc.beginPath();
-				bgc.fillStyle = 'rgba('+((220*r)|0)+','+((230*r)|0)+','+((240*r)|0)+',.1)';
-				console.log(r, 'rgb('+((220*r)|0)+','+((230*r)|0)+','+((240*r)|0)+',.9)')
+				bgc.fillStyle = fill;
+				console.log(r, fill);
 				bgc.moveTo(0,r*h/6);
 				bgc.bezierCurveTo(w/4,r*h/10,w/2,r*h/6,w,r*h/12);
 				bgc.lineTo(w,h);
