@@ -11,18 +11,21 @@ canvas { position:absolute; top:0; left:0; }
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
 
-@-webkit-keyframes makeitso {
-	from { opacity:0; }
-	to {opacity:.4; }
+
+@-webkit-keyframes fall {
+	0% { opacity:0; margin-top:-1em }
+	50% { opacity:.4 }
+	100% { opacity:0; margin-top:1em }
 }
-@-moz-keyframes makeitso {
-	from {opacity:0;}
-	to {opacity:.4;}
+@-moz-keyframes fall {
+	0% { opacity:0; margin-top:-1em }
+	50% { opacity:.4 }
+	100% { opacity:0; margin-top:1em }
 }
 .snow { opacity:0; }
 .fadein {
-	-webkit-animation: makeitso 2s 0s 2 ease-in-out alternate;
-	-moz-animation: makeitso 2s 0s 2 ease-in-out alternate;
+	-webkit-animation: fall 4s;
+	-moz-animation: fall 4s;
 }
 
 textarea { 
@@ -57,13 +60,10 @@ textarea {
 		var map = {};
 		return {
 			addEventListener: function(event,callback) {
-				map[event] = map[event] || [];
-				map[event].push(callback);
+				map[event] = (map[event] || []).concat(callback);
 			},
 			trigger: function(event) {
-				if (typeof map[event] === 'undefined') 
-					return;
-				for (var i in map[event])
+				for (var i in map[event] || {})
 					map[event][i].call(main);
 			}
 		};
@@ -141,12 +141,8 @@ textarea {
 
 				ctx.clearRect(0,0,60,60); 
 				new_flake.x = new_flake.x || 0;
-				if (new_flake.x ^= 1) {
-					snowflake(i, 30,30, ctx);	
-				}
-				else {
-					phlake(i, 30,30, ctx);	
-				} 
+				if (new_flake.x ^= 1) snowflake(i, 30,30, ctx);	
+				else phlake(i, 30,30, ctx);
 				return canvas;
 	    	}
 
@@ -159,16 +155,13 @@ textarea {
 	    	function add_a_flake(canvas) {
 	    		var flake = new_flake(canvas);
 	    		// force reflow with 0 timeout
-	    		setTimeout(function() {
-	    			flake.className = 'flake fadein';
-	    		},0);
+	    		setTimeout(function() { flake.className = 'flake fadein' },0);
 	    		// if (i % 15 === 0) 
 	    		// 	flake.className += '';
 	    	}
 
 	    	function flake_is_over(e) {
-				if (/flake fadein/.test(e.target.className) === false) return;
-				add_a_flake(e.target);
+				return (e.target.className != 'flake fadein') || add_a_flake(e.target);
 			}
 
 			document.body.addEventListener('webkitAnimationEnd',flake_is_over,false);
@@ -176,7 +169,6 @@ textarea {
 			
 			(function() {
 				var flakes = Math.max(15,(window.innerWidth*window.innerHeight)/30000|0);
-				console.log(flakes);
 
 				// kill any existing
 				var dead_flakes = [].slice.call(document.getElementsByClassName('flake')), i;
@@ -208,15 +200,20 @@ textarea {
 				fgc = fg_ctx;
 
 			// bg hill
-			bgc.save();
-			bgc.beginPath();
-			bgc.fillStyle = 'rgb(220,230,240)';
-			bgc.moveTo(0,h/6);
-			bgc.bezierCurveTo(w/4,h/10,w/2,h/6,w,h/12);
-			bgc.lineTo(w,h);
-			bgc.lineTo(0,h);
-			bgc.fill();
-			bgc.restore();
+			var layers = 10;
+			while (--layers){
+				var r = 1/Math.log(layers);
+				bgc.save();
+				bgc.beginPath();
+				bgc.fillStyle = 'rgba('+((220*r)|0)+','+((230*r)|0)+','+((240*r)|0)+',.1)';
+				console.log(r, 'rgb('+((220*r)|0)+','+((230*r)|0)+','+((240*r)|0)+',.9)')
+				bgc.moveTo(0,r*h/6);
+				bgc.bezierCurveTo(w/4,r*h/10,w/2,r*h/6,w,r*h/12);
+				bgc.lineTo(w,h);
+				bgc.lineTo(0,h);
+				bgc.fill();
+				bgc.restore();
+			}
 
 			// main hill
 			fgc.save();
