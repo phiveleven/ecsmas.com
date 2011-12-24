@@ -11,23 +11,6 @@ canvas { position:absolute; top:0; left:0; }
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
 
-
-@-webkit-keyframes fall {
-	0% { opacity:0; margin-top:-1em }
-	50% { opacity:.4 }
-	100% { opacity:0; margin-top:1em }
-}
-@-moz-keyframes fall {
-	0% { opacity:0; margin-top:-1em }
-	50% { opacity:.4 }
-	100% { opacity:0; margin-top:1em }
-}
-.snow { opacity:0; }
-.fadein {
-	-webkit-animation: fall 4s;
-	-moz-animation: fall 4s;
-}
-
 textarea { 
 	position:absolute; top:65%; left:32%; width:30%; height:25%; border:none;
 	padding:2px 10px; font-size:22px; font-weight:bold; font-family:'Comic Sans MS', cursive; resize:none;
@@ -49,8 +32,18 @@ textarea {
 	PHI = Math.sqrt(5)/2+.5;
 	TWOPI = Math.PI*2;
 </script>
+<script src="lib/three.js/build/Three.js"></script>
 <script src="js/gift.js"></script>
 <script src="js/phlaky.js"></script>
+<script>
+// stats.js r8 - http://github.com/mrdoob/stats.js
+var Stats=function(){var h,a,n=0,o=0,i=Date.now(),u=i,p=i,l=0,q=1E3,r=0,e,j,f,b=[[16,16,48],[0,255,255]],m=0,s=1E3,t=0,d,k,g,c=[[16,48,16],[0,255,0]];h=document.createElement("div");h.style.cursor="pointer";h.style.width="80px";h.style.opacity="0.9";h.style.zIndex="10001";h.addEventListener("mousedown",function(a){a.preventDefault();n=(n+1)%2;n==0?(e.style.display="block",d.style.display="none"):(e.style.display="none",d.style.display="block")},!1);e=document.createElement("div");e.style.textAlign=
+"left";e.style.lineHeight="1.2em";e.style.backgroundColor="rgb("+Math.floor(b[0][0]/2)+","+Math.floor(b[0][1]/2)+","+Math.floor(b[0][2]/2)+")";e.style.padding="0 0 3px 3px";h.appendChild(e);j=document.createElement("div");j.style.fontFamily="Helvetica, Arial, sans-serif";j.style.fontSize="9px";j.style.color="rgb("+b[1][0]+","+b[1][1]+","+b[1][2]+")";j.style.fontWeight="bold";j.innerHTML="FPS";e.appendChild(j);f=document.createElement("div");f.style.position="relative";f.style.width="74px";f.style.height=
+"30px";f.style.backgroundColor="rgb("+b[1][0]+","+b[1][1]+","+b[1][2]+")";for(e.appendChild(f);f.children.length<74;)a=document.createElement("span"),a.style.width="1px",a.style.height="30px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+b[0][0]+","+b[0][1]+","+b[0][2]+")",f.appendChild(a);d=document.createElement("div");d.style.textAlign="left";d.style.lineHeight="1.2em";d.style.backgroundColor="rgb("+Math.floor(c[0][0]/2)+","+Math.floor(c[0][1]/2)+","+Math.floor(c[0][2]/2)+")";d.style.padding=
+"0 0 3px 3px";d.style.display="none";h.appendChild(d);k=document.createElement("div");k.style.fontFamily="Helvetica, Arial, sans-serif";k.style.fontSize="9px";k.style.color="rgb("+c[1][0]+","+c[1][1]+","+c[1][2]+")";k.style.fontWeight="bold";k.innerHTML="MS";d.appendChild(k);g=document.createElement("div");g.style.position="relative";g.style.width="74px";g.style.height="30px";g.style.backgroundColor="rgb("+c[1][0]+","+c[1][1]+","+c[1][2]+")";for(d.appendChild(g);g.children.length<74;)a=document.createElement("span"),
+a.style.width="1px",a.style.height=Math.random()*30+"px",a.style.cssFloat="left",a.style.backgroundColor="rgb("+c[0][0]+","+c[0][1]+","+c[0][2]+")",g.appendChild(a);return{domElement:h,update:function(){i=Date.now();m=i-u;s=Math.min(s,m);t=Math.max(t,m);k.textContent=m+" MS ("+s+"-"+t+")";var a=Math.min(30,30-m/200*30);g.appendChild(g.firstChild).style.height=a+"px";u=i;o++;if(i>p+1E3)l=Math.round(o*1E3/(i-p)),q=Math.min(q,l),r=Math.max(r,l),j.textContent=l+" FPS ("+q+"-"+r+")",a=Math.min(30,30-l/
+100*30),f.appendChild(f.firstChild).style.height=a+"px",p=i,o=0}}};
+</script>
 <script>
 (function() {
 	var main = this;
@@ -82,6 +75,7 @@ textarea {
 		update_canvi();
 		window.addEventListener('resize',function() {
 			// use delay to prevent retriggering updates on every single resize event
+
 			clearTimeout(timeout);
 			timeout = setTimeout(update_canvi,200);	
 		});
@@ -94,7 +88,7 @@ textarea {
 			window.mozRequestAnimationFrame ||  
             window.msRequestAnimationFrame ||
             function (callback) {
-            	window.setTimeout(callback,30);
+            	window.setTimeout(function() { callback(Date.now()); },30);
             }
 	})();
 
@@ -104,8 +98,109 @@ textarea {
     Callbacks.trigger('resize');
 
     function render_page() {
+
+    	(function() {
+    		var r = new THREE.WebGLRenderer({antialias: true}),
+				c = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 1, 10000),
+				s = new THREE.Scene(),
+				stats = new Stats;
+
+
+			// stats
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.top = '0px';
+			document.body.appendChild( stats.domElement );
+
+			// init
+			// c.projectScene(s);
+			r.setSize(window.innerWidth, window.innerHeight)
+			document.body.insertBefore(r.domElement,document.getElementById('foreground'));
+			r.clear();
+
+			c.position.z = 300;
+
+
+
+			function v(x,y,z){ 
+			  return new THREE.Vertex(new THREE.Vector3(x,y,z)); 
+			}
+			
+			var lineGeo = new THREE.Geometry();
+			lineGeo.vertices.push(
+			  v(-50, -0, 0), v(50, 0, 0),
+			  v(0, -50, 0), v(0, 50, 0),
+			  v(0, 0, -50), v(0, 0, 50)
+			);
+			var lineMat = new THREE.LineBasicMaterial({
+			  color: 0x0000ff, linewidth: 5, linecap: 'round'});
+			var line = new THREE.Line(lineGeo, lineMat);
+			line.type = THREE.Lines;
+			s.add(line);
+
+
+
+
+			// // add cube
+			// var cube = new THREE.Mesh(new THREE.CubeGeometry(50,50,50), new THREE.MeshBasicMaterial({color: 0x000000}));
+			// s.add(cube);
+
+
+
+			// var light = new THREE.SpotLight();
+			// light.position.set( 170, 330, -160 );
+			// s.add(light);
+
+			// var litCube = new THREE.Mesh(
+			// 	new THREE.CubeGeometry(50, 50, 50),
+			// 	new THREE.MeshLambertMaterial({color: 0xFFFFFF})
+			// );
+			// litCube.position.y = 50;
+			// s.add(litCube);
+
+			// r.shadowMapEnabled = true;
+			// light.castShadow = true;
+			// litCube.castShadow = true;
+			// litCube.receiveShadow = true;
+
+
+			// var planeGeo = new THREE.PlaneGeometry(400, 200, 10, 10);
+			//   var planeMat = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
+			//   var plane = new THREE.Mesh(planeGeo, planeMat);
+			//   plane.rotation.x = -Math.PI/2;
+			//   plane.position.y = -25;
+			//   plane.receiveShadow = true;
+			//   s.add(plane);
+
+
+
+			r.render(s,c);
+
+			Callbacks.addEventListener('resize',function() {
+				r.setSize(window.innerWidth, window.innerHeight)
+				r.render(s,c);
+			});
+
+			(function(t) {
+				// litCube.position.x = Math.cos(t/600)*85;
+				// litCube.position.y = 60-Math.sin(t/900)*25;
+				// litCube.position.z = Math.sin(t/600)*85;
+				// litCube.rotation.x = t/500;
+				// litCube.rotation.y = t/800;
+
+
+				c.position.x = Math.sin(t/10000)*300;
+				c.position.y = 150;
+				c.position.z = Math.cos(t/10000)*300;
+				c.lookAt(s.position);
+				r.render(s, c);
+				stats.update();
+
+				requestAnimationFrame(arguments.callee, r.domElement);
+			})(Date.now());
+    	})();
+
 	    // snow canvas shenanigance
-	    (function() { 
+	    (function() { return;
 
 	    	var fg_canvas = document.getElementById('foreground'),
 	    		fg_ctx = fg_canvas.getContext('2d');
@@ -208,7 +303,7 @@ textarea {
 				bgc.save();
 				bgc.beginPath();
 				bgc.fillStyle = fill;
-				console.log(r, fill);
+				// console.log(r, fill);
 				bgc.moveTo(0,r*h/6);
 				bgc.bezierCurveTo(w/4,r*h/10,w/2,r*h/6,w,r*h/12);
 				bgc.lineTo(w,h);
@@ -232,7 +327,7 @@ textarea {
 			fgc.restore();
 		})();
 
-
+		// text area or snow playpen?
 		(function() {
 			var canvas = document.getElementById('overlay'),
 				ctx = canvas.getContext('2d'),
